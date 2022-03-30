@@ -1,0 +1,5 @@
+{
+    "yaml.schemas": {
+        "kubernetes://schema/apps/v1%40deployment": "file:///opt/tmp/cfdsa-mar29-2022/demo02/dov-deploy.yaml"
+    }
+}
