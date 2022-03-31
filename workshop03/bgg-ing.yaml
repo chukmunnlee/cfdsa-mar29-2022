@@ -24,7 +24,8 @@ spec:
               name: v2-bggapp-svc
               port:
                 number: 8080
+
   tls:
-  - secretName: bgg-tls
-    hosts:
+  - hosts: 
     - bgg-146.190.4.104.nip.io
+    secretName: bgg-tls

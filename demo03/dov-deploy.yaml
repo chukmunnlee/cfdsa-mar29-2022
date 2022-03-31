@@ -16,7 +16,7 @@ metadata:
   labels:
     name: dov-deploy
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       name: dov-pod
@@ -42,6 +42,10 @@ spec:
         ports:
         - name: dov-port 
           containerPort: 3000
+        resources:
+          requests:
+            cpu: 100m 
+            memory: 32Mi
 
 ---
 apiVersion: v1 
@@ -65,8 +69,6 @@ metadata:
   name: dov-ing
   labels:
     name: dov-ing
-  annotations:
-    nginx.ingress.kubernetes.io/limit-rps: "5"
 spec: 
   ingressClassName: nginx
   rules:
@@ -80,3 +82,25 @@ spec:
             name: dov-svc
             port: 
               number: 8080
+---
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler 
+metadata:
+  name: dov-hpa 
+  labels:
+    name: dov-hpa 
+spec:
+  minReplicas: 1
+  maxReplicas: 4
+  scaleTargetRef:
+    apiVersion: apps/v1 
+    kind: Deployment 
+    name: dov-deploy
+  metrics:
+  - type: Resource 
+    resource:
+      name: cpu 
+      target: 
+        type: Utilization
+        averageUtilization: 70
+
